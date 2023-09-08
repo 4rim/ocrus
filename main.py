@@ -6,11 +6,14 @@ from pathlib import Path
 import glob
 import sys
 import os
+import timeit
+
+start_time = timeit.default_timer()
+temp = sys.stdout
 
 # setup: do all files/paths exist?
-
 output = Path("./output.txt")
-if not output.exists():
+if not output.is_file():
     sys.exit('''output.txt does not exist! Please create one with the command
              touch output.txt.''')
 
@@ -27,18 +30,18 @@ if image_path.exists():
 
         text = pytesseract.image_to_string(wrapped, config = "-l rus")
         os.chdir("../")
-
-        if os.path.getsize(output) > 0:
-            open(output, "w")
-
-        output_file = open(output, "a")
         
-        sys.stdout = output_file
+        with open(output, "a") as output_file:
+            sys.stdout = output_file
+            print(text)
 
-        print(text)
-
-        output_file.close()
+        os.chdir(image_path)
 else:
     sys.exit=('''Image path doesn't exist! Set one up with the command mkdir
               images.''')
+
+stop_time = timeit.default_timer()
+
+sys.stdout = temp
+print("All done! Time: ", stop_time - start_time)
 
