@@ -10,7 +10,6 @@ import timeit
 from threading import Thread
 from multiprocessing import Pool
 from multiprocessing.dummy import Pool as ThreadPool
-import asyncio
 
 def is_path_valid(path_name):
     if not os.path.exists(path_name):
@@ -37,14 +36,11 @@ def do_ocr(file_name):
 
     os.chdir(image_path)
 
-# instantiate lock
-lock = asyncio.Lock()
-
-# instantiate Pool objects in code
-pool = ThreadPool(4)
-
 start_time = timeit.default_timer()
 temp = sys.stdout
+
+# instantiate Pool objects in code
+pool = ThreadPool()
 
 # setup: do all files/paths exist?
 output = Path("./output.txt")
@@ -61,6 +57,7 @@ file_list = glob.glob("*.png")
 
 pool.map(do_ocr, file_list)
 pool.close()
+pool.join()
 
 stop_time = timeit.default_timer()
 
