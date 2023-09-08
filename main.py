@@ -10,6 +10,7 @@ import timeit
 from threading import Thread
 from multiprocessing import Pool
 from multiprocessing.dummy import Pool as ThreadPool
+import asyncio
 
 def is_path_valid(path_name):
     if not os.path.exists(path_name):
@@ -22,10 +23,25 @@ def empty_file(file_name):
         file = open(file_name, 'w')
         file.close
 
-# instantiate Pool objects in code
-# pool = ThreadPool(4)
+def do_ocr(file_name):
+    img_file = os.fspath(file_name)
+    image = cv2.imread(img_file)
+    wrapped = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    text = pytesseract.image_to_string(wrapped, config = "-l rus")
 
-# def ocr_thread(file, output):
+    os.chdir("../")
+    
+    with open(output, "a") as output_file:
+        sys.stdout = output_file
+        print(text)
+
+    os.chdir(image_path)
+
+# instantiate lock
+lock = asyncio.Lock()
+
+# instantiate Pool objects in code
+pool = ThreadPool(4)
 
 start_time = timeit.default_timer()
 temp = sys.stdout
@@ -43,22 +59,8 @@ os.chdir(image_path)
 # creates a list of all image files w extension .png
 file_list = glob.glob("*.png")
 
-# results = pool.map(blah, file_list)
-# pool.close()
-    
-for idx, file in enumerate(file_list):
-    img_file = os.fspath(file)
-    image = cv2.imread(img_file)
-    wrapped = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-
-    text = pytesseract.image_to_string(wrapped, config = "-l rus")
-    os.chdir("../")
-        
-    with open(output, "a") as output_file:
-        sys.stdout = output_file
-        print(text)
-
-    os.chdir(image_path)
+pool.map(do_ocr, file_list)
+pool.close()
 
 stop_time = timeit.default_timer()
 
