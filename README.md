@@ -12,3 +12,10 @@ use the corpus for several things, including but not limited to:
 
 Currently this focuses on Russian, but it could be used for any language in the
 [tessdata](https://github.com/tesseract-ocr/tessdata) repo.
+
+## Future plans:
+
+- Probably use a better OCR service than Tesseract...
+- Make script compatible with Windows/Mac/Linux
+- (distant-er future) add a Qt GUI front-end that works with ShareX/other
+  screenshot apps
