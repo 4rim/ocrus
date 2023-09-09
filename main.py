@@ -29,13 +29,13 @@ def do_ocr(file_name):
     image = cv2.imread(img_file)
     wrapped = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     text = pytesseract.image_to_string(wrapped, config = "-l rus")
-
-    os.chdir("../")
     
+    os.chdir('../')
+
     with open(output, "a") as output_file, data_lock:
         sys.stdout = output_file
         print(text)
-
+    
     os.chdir(image_path)
 
 start_time = timeit.default_timer()
@@ -45,11 +45,11 @@ temp = sys.stdout
 pool = ThreadPool()
 
 # setup: do all files/paths exist?
-output = Path("./output.txt")
+output = Path("output.txt").resolve()
 is_path_valid(output)
 empty_file(output)
 
-image_path = Path('./images')
+image_path = Path("images").resolve()
 is_path_valid(image_path)
 
 os.chdir(image_path)
