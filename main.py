@@ -7,9 +7,11 @@ import glob
 import sys
 import os
 import timeit
-from threading import Thread
+import threading 
 from multiprocessing import Pool
 from multiprocessing.dummy import Pool as ThreadPool
+
+data_lock = threading.Lock()
 
 def is_path_valid(path_name):
     if not os.path.exists(path_name):
@@ -30,7 +32,7 @@ def do_ocr(file_name):
 
     os.chdir("../")
     
-    with open(output, "a") as output_file:
+    with open(output, "a") as output_file, data_lock:
         sys.stdout = output_file
         print(text)
 
