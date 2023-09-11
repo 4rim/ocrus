@@ -1,6 +1,5 @@
 from textblob import TextBlob
 import pytesseract
-# import argparse
 import cv2
 from pathlib import Path
 import glob
@@ -27,6 +26,8 @@ def empty_file(file_name):
 def do_ocr(file_name):
     img_file = os.fspath(file_name)
     image = cv2.imread(img_file)
+    if image is None:
+            sys.exit("Invalid image. Please check your images directory.")
     wrapped = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     text = pytesseract.image_to_string(wrapped, config = "-l rus")
     
