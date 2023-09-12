@@ -15,7 +15,13 @@ Currently this focuses on Russian, but it could be used for any language in the
 
 ## Future plans:
 
-- Probably use a better OCR service than Tesseract...
-- Make script compatible with Windows/Mac/Linux
-- (distant-er future) add a Qt GUI front-end that works with ShareX/other
-  screenshot apps
+- Probably use a better OCR service than Tesseract. I'm thinking of using
+  [this](https://huggingface.co/docs/transformers/model_doc/vision-encoder-decoder)
+  model, though that would require me to study up a bit on PyTorch - I don't
+  mind!
+- Make script compatible with Windows/Mac/Linux filesystems - should be a minor
+  fix.
+- (distant-er future) Add a GUI front-end that works with ShareX/other
+  screenshot apps. Could do this with Qt, could do this with
+  [Gooey](http://chriskiehl.com/article/gooey-as-a-universal-frontend), which
+  looks quite intuitive to use :)
